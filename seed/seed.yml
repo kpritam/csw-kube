@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: seed
+  name: seed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: seed
+  template:
+    metadata:
+      labels:
+        run: seed
+    spec:
+      containers:
+      - image: phkadam2008/csw-cluster-seed
+        name: seed
+        env:
+          - name: CLUSTER_PORT
+            value: "3552"
+          - name: CLUSTER_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
