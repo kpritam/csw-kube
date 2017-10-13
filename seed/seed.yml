@@ -17,6 +17,7 @@ spec:
       containers:
       - image: phkadam2008/csw-cluster-seed
         name: seed
+        imagePullPolicy: IfNotPresent
         env:
           - name: CLUSTER_PORT
             value: "3552"
@@ -24,3 +25,4 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+        command: ["sh", "-c", "bin/csw-cluster-seed --clusterPort $(CLUSTER_PORT) -DclusterSeeds=$(CLUSTER_IP):$(CLUSTER_PORT)"]
