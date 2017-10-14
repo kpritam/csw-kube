@@ -44,6 +44,12 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["sh", "-c", "bin/csw-cluster-seed --clusterPort $(CLUSTER_PORT) -DclusterSeeds=$(CLUSTER_IP):$(CLUSTER_PORT) -DmanagementPort=7879"]
+        livenessProbe:
+          httpGet:
+            path: /members
+            port: 7879
+          initialDelaySeconds: 3
+          periodSeconds: 3
         ports:
           - containerPort: 7878
           - containerPort: 7879
