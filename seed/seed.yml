@@ -43,7 +43,11 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-        command: ["sh", "-c", "bin/csw-cluster-seed --clusterPort $(CLUSTER_PORT) -DclusterSeeds=$(CLUSTER_IP):$(CLUSTER_PORT) -DmanagementPort=7879"]
+        command: ["bin/csw-cluster-seed"]
+        args:
+          - "-DclusterSeeds=$(CLUSTER_IP):$(CLUSTER_PORT)"
+          - "--clusterPort=$(CLUSTER_PORT)"
+          - "-DmanagementPort=7879"
         livenessProbe:
           httpGet:
             path: /members

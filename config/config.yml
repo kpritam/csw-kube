@@ -1,0 +1,51 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: config
+spec:
+  type: NodePort
+  selector:
+    app: config
+  ports:
+    - port: 4000
+      protocol: TCP
+      targetPort: 4000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: config
+  name: config
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: config
+  template:
+    metadata:
+      labels:
+        run: config
+    spec:
+      containers:
+      - image: phkadam2008/csw-config-server:0.1-SNAPSHOT
+        name: config
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CONFIG_PORT
+            value: "4000"
+          - name: CLUSTER_PORT
+            value: "3553"
+          - name: CLUSTER_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["bin/csw-config-server"]
+        args:
+          - "-DclusterSeeds=$(CLUSTER_IP):$(CLUSTER_PORT)"
+          - "-DclusterPort=$(CLUSTER_PORT)"
+          - "--initRepo"
+          - "--port=$(CONFIG_PORT)"
+        ports:
+          - containerPort: 4000
+            hostPort: 4000
