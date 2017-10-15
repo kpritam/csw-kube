@@ -10,7 +10,7 @@
 
 ### How to Run
 
-- Execute up.sh script from shell
+- Execute `up.sh` script from shell
 
     This will start following:
     - Cluster Seed on Port 3552
@@ -18,6 +18,12 @@
     - Cluster Management on Port 7879
     - Config Server on Port 4000
 
-- Run minikube dashboard to view kubernetes dashboard where you can see logs from all the applications.
+- Run `minikube dashboard` cmd from shell to view kubernetes dashboard where you can see logs from all the applications.
 
-- Run minikube service config --url, which will give Config server url which can be accessible from host machine
+- Run `minikube service config --url` cmd from shell, which will give Config server url which can be accessible from host machine
+
+### Shutdown Cluster
+
+- Execute `down.sh` script from shell, which will remove all the deployments, services and statefulsets
+
+- Run `minikube stop` to stop minikube cluster
