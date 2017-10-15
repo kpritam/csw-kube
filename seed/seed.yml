@@ -1,9 +1,8 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: seed
 spec:
-  type: NodePort
   selector:
     app: seed
   ports:
@@ -15,26 +14,32 @@ spec:
       protocol: TCP
       port: 7879
       targetPort: 7879
+    - name: cluster
+      protocol: TCP
+      port: 3552
+      targetPort: 3552
+  clusterIP: None
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   labels:
-    run: seed
+    app: seed
   name: seed
 spec:
+  serviceName: seed
   replicas: 1
   selector:
     matchLabels:
-      run: seed
+      app: seed
   template:
     metadata:
       labels:
-        run: seed
+        app: seed
     spec:
       containers:
-      - image: phkadam2008/csw-cluster-seed
-        name: seed
+      - name: seed
+        image: phkadam2008/csw-cluster-seed
         imagePullPolicy: IfNotPresent
         env:
           - name: CLUSTER_PORT
@@ -49,12 +54,12 @@ spec:
           - "--clusterPort=$(CLUSTER_PORT)"
           - "-DmanagementPort=7879"
         livenessProbe:
-          httpGet:
-            path: /members
-            port: 7879
-          initialDelaySeconds: 3
-          periodSeconds: 3
+          tcpSocket:
+            port: 3552
         ports:
           - containerPort: 7878
+            hostPort: 7878
           - containerPort: 7879
+            hostPort: 7879
           - containerPort: 3552
+            hostPort: 3552
