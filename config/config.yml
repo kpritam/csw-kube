@@ -26,6 +26,21 @@ spec:
     metadata:
       labels:
         app: config
+      annotations:
+          pod.alpha.kubernetes.io/init-containers: '[
+          {
+              "name": "config-init",
+              "image": "phkadam2008/csw-config-server",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "chown -R daemon:daemon ."],
+              "volumeMounts": [
+                  {
+                    "name": "svn",
+                    "mountPath": "/tmp/csw-config-svn"
+                  }
+              ]
+          }
+      ]'
     spec:
       containers:
       - image: phkadam2008/csw-config-server
@@ -42,9 +57,6 @@ spec:
         ports:
           - containerPort: 4000
             hostPort: 4000
-        volumeMounts:
-          - name: svn
-            mountPath: /tmp/csw-config-svn
       volumes:
         - name: svn
           hostPath:
