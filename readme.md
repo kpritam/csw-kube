@@ -12,11 +12,11 @@
 
 - Execute `up.sh` script from shell
 
-    This will start following:
-    - Cluster Seed on Port 3552
-    - Admin Http Server on Port 7878
-    - Cluster Management on Port 7879
-    - Config Server on Port 4000
+  This will start following:
+  - Cluster Seed on Port 3552
+  - Admin Http Server on Port 7878
+  - Cluster Management on Port 7879
+  - Config Server on Port 4000
 
 - Run `minikube dashboard` cmd from shell to view kubernetes dashboard where you can see logs from all the applications.
 
